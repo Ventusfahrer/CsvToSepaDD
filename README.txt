@@ -120,7 +120,7 @@ _________________
   eine SEPA-XML-Datei umgewandelt:
 
   ,----
-  | ./CsvToSepaDD.py convert input.csv output.xml
+  | ./CsvToSepaDD.py convert config.py input.csv output.xml
   `----
 
 

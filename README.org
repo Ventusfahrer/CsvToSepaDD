@@ -84,7 +84,7 @@ Unter Angabe der Konfigurationsdatei werden dann die Eingabedateien in eine
 SEPA-XML-Datei umgewandelt:
 
 #+BEGIN_EXAMPLE
-./CsvToSepaDD.py convert input.csv output.xml
+./CsvToSepaDD.py convert config.py input.csv output.xml
 #+END_EXAMPLE
 
 
