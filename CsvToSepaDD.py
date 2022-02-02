@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import argparse
 import csv
@@ -7,6 +7,7 @@ import pprint
 import string
 import sys
 
+sys.path.append('./PySepaDD')
 import PySepaDD
 
 
@@ -14,8 +15,6 @@ import PySepaDD
 # account.  Otherwise, for each debtor there will be a single item.
 DEFAULT_BATCH = True
 DEFAULT_CURRENCY = 'EUR'
-
-
 
 class spgVereinExcelDialect(csv.Dialect):
     '''
@@ -29,8 +28,6 @@ class spgVereinExcelDialect(csv.Dialect):
     strict = True
 
 csv.register_dialect('spg-verein-excel', spgVereinExcelDialect)
-
-
 
 class calcDialect(csv.Dialect):
     '''
@@ -111,10 +108,10 @@ def csvToSepa(args):
     '''
 
     config = None
-    with open(args.config, 'rb') as f:
+    with open(args.configfile, 'r') as f:
         config = eval(f.read())
 
-    with open(args.input, 'rb') as inFile, open(args.output, 'wb') as outFile:
+    with open(args.inputfile, 'r') as inFile, open(args.outputfile, 'w') as outFile:
         csvReader = csv.DictReader(inFile, dialect=config['csv_dialect'])
         sepaWriter = PySepaDD.PySepaDD(config)
 
@@ -147,8 +144,8 @@ def csvToSepa(args):
 
         for row in csvReader:
             payment = {
-                    'name': string.strip('%s %s' % (row['first_name'], row['last_name'])),
-                    'IBAN': row['IBAN'],
+                    'name': f'{row["first_name"]} {row["last_name"]}',
+                    'IBAN': row['IBAN'].replace(' ',''),
                     'BIC': row['BIC'],
                     'amount': euroToCents(row['amount']),
                     'type': row['type'],
@@ -168,11 +165,11 @@ def csvToSepa(args):
 def createConfig(args):
     '''Interactively creates a configuation file'''
 
-    name = raw_input('your name: ')
-    iban = raw_input('your IBAN: ')
-    bic = raw_input('your BIC: ')
-    creditorId = raw_input('your creditor id: ')
-    csvDialect = raw_input('CSV dialect [%s]: ' % ' '.join(sorted(csv.list_dialects())))
+    name = input('your name: ')
+    iban = input('your IBAN: ')
+    bic = input('your BIC: ')
+    creditorId = input('your creditor id: ')
+    csvDialect = input('CSV dialect [%s]: ' % ' '.join(sorted(csv.list_dialects())))
 
     # we use a PySepaDD-compatible configuration dict for simplicity
     config = {
@@ -185,12 +182,12 @@ def createConfig(args):
             'csv_dialect': csvDialect,
     }
 
-    with open(args.config, 'wb') as f:
+    with open(args.configfile, 'w') as f:
         pprint.pprint(config, stream=f, indent=4)
 
-    print 'Configuration written to file %s. ' \
-          'You can edit this file with a text ' \
-          'editor if you need to change something later.' % args.config
+    print (f'''Configuration written to file {args.configfile}. 
+You can edit this file with a text 
+editor if you need to change something later.''')
 
 
 
@@ -201,13 +198,13 @@ if __name__ == '__main__':
 
     genConfigParser = subparsers.add_parser('genconfig', help='generate a configuration file')
     genConfigParser.set_defaults(func=createConfig)
-    genConfigParser.add_argument('config', help='name of the configuration file')
+    genConfigParser.add_argument('configfile', help='name of the configuration file')
 
     convertParser = subparsers.add_parser('convert', help='convert a CSV file to a SEPA XML file')
     convertParser.set_defaults(func=csvToSepa)
-    convertParser.add_argument('config', help='configuration file to use')
-    convertParser.add_argument('input', help='input file')
-    convertParser.add_argument('output', help='output file')
+    convertParser.add_argument('configfile', help='configuration file to use')
+    convertParser.add_argument('inputfile', help='input file')
+    convertParser.add_argument('outputfile', help='output file')
 
     args = parser.parse_args()
     args.func(args)
