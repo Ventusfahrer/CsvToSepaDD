@@ -9,6 +9,9 @@ import sys
 
 sys.path.append('./PySepaDD')
 import PySepaDD
+sys.path.append('./PyIbanCheck')
+
+from ibancheck import IBANcheck
 
 
 # if true, all debits will occur as a single item at the creditor's bank
@@ -107,9 +110,17 @@ def csvToSepa(args):
     Converts the SEPA direct debit data from a given CSV file to SEPA XML
     '''
 
+    ibc = IBANcheck()
+
     config = None
     with open(args.configfile, 'r') as f:
-        config = eval(f.read())
+        try:
+            config = eval(f.read())
+        except SyntaxError:
+            print(f'\nDie Datei "{args.configfile}" ist vermutlich keine gültige Konfigurationsdatei!')
+            print('Bitte die Reihenfolge der Parameter beachten!')
+            print('weitere Informationen: CsvToSepaDD.py convert --help')
+            exit()
 
     with open(args.inputfile, 'r') as inFile, open(args.outputfile, 'w') as outFile:
         csvReader = csv.DictReader(inFile, dialect=config['csv_dialect'])
@@ -141,11 +152,15 @@ def csvToSepa(args):
         if error:
             raise KeyError
 
-
         for row in csvReader:
+            row['IBAN'] = row['IBAN'].replace(' ','').upper()
+            if not ibc.check(row['IBAN']):
+                print(f'IBAN ({row["IBAN"]}) is not valid. Name: {row["first_name"]} {row["last_name"]}',file=sys.stderr)
+
+            row['IBAN'] = row['IBAN'].replace(' ','').upper()
             payment = {
                     'name': f'{row["first_name"]} {row["last_name"]}',
-                    'IBAN': row['IBAN'].replace(' ',''),
+                    'IBAN': row['IBAN'].replace(' ','').upper(),
                     'BIC': row['BIC'],
                     'amount': euroToCents(row['amount']),
                     'type': row['type'],
@@ -166,7 +181,7 @@ def createConfig(args):
     '''Interactively creates a configuation file'''
 
     name = input('your name: ')
-    iban = input('your IBAN: ')
+    iban = input('your IBAN: ').replace(' ','')
     bic = input('your BIC: ')
     creditorId = input('your creditor id: ')
     csvDialect = input('CSV dialect [%s]: ' % ' '.join(sorted(csv.list_dialects())))
@@ -206,5 +221,11 @@ if __name__ == '__main__':
     convertParser.add_argument('inputfile', help='input file')
     convertParser.add_argument('outputfile', help='output file')
 
-    args = parser.parse_args()
-    args.func(args)
+    try:
+        args = parser.parse_args()
+    except SystemExit:
+        exit()
+    try:
+        args.func(args)
+    except AttributeError:
+        parser.parse_args(['-h'])

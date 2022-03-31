@@ -4,6 +4,7 @@
 			       CONVERTER
 
 	  Michael Fiedler <dev %AT% michael-fiedler %DOT% net>
+    Peter Simon - latest Modifications
 	 ______________________________________________________
 
 
@@ -16,12 +17,15 @@ _________________
 .. 1.3 Verwendung
 .. 1.4 Lizenz
 .. 1.5 Kontakt
+.. 1.6 Änderungshinweise
 2 English
+.. 2.0 Version Information
 .. 2.1 Description
 .. 2.2 Setup
 .. 2.3 Usage
 .. 2.4 License
 .. 2.5 Contact
+.. 2.6 Modifications
 
 
 
@@ -147,6 +151,18 @@ _________________
 
   [Projektseite] https://github.com/mfiedler/CsvToSepaDD
 
+1.6 Änderungshinweise
+~~~~~~~~~~~~~~~~~~~~~
+
+  In diesem Fork wurden folgende Änderungen durchgeführt:
+  - Python3 ist erforderlich für die Ausführung
+  - input.csv kann in UTF-8 codiert sein
+  - Unterstüzung von Zeichen außerhalb ASCII
+  - Verbessertes Fehlerhandlung bei fehlerhaften Argumenten
+  - Leerzeichen in der IBAN werden automatisch 
+  - IBAN wird automatisch nach Großbuchstaben konvertiert
+  - IBAN wird nach interner Prüfsumme geprüft
+
 
 2 English
 =========
@@ -237,7 +253,7 @@ _________________
   configuration file:
 
   ,----
-  | ./CsvToSepaDD.py convert input.csv output.xml
+  | ./CsvToSepaDD.py convert config.py input.csv output.xml
   `----
 
 
@@ -262,3 +278,15 @@ _________________
 
 
   [project page] https://github.com/mfiedler/CsvToSepaDD
+
+2.6 Modifications
+~~~~~~~~~~~~~~~~~
+
+  In this fork following changes have been performed:
+  - Python3 is neede for executions
+  - input.csv can be encoded in UTF-8
+  - support of characters outside ASCII
+  - improved error handling when wrong arguments are used
+  - blanks inside IBAN will be remove automatically
+  - IBAN will be automatically converted to uppercase
+  - IBAN is checked with checksum information

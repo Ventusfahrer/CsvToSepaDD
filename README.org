@@ -1,5 +1,6 @@
 #+TITLE: CsvToSepaDD -- A simple CSV to SEPA XML converter
 #+AUTHOR: Michael Fiedler <dev %AT% michael-fiedler %DOT% net>
+#+MODIFICATOR: Ventusfahrer - Portierung nach python3, verbessertes Handling beim Aufruf
 
 * German
 ** Kurzbeschreibung
@@ -101,6 +102,16 @@ werden.  Der vollständige Lizenztext ist in der Datei ~LICENCE.BSD~ zu finden.
 Siehe die [[https://github.com/mfiedler/CsvToSepaDD][Projektseite]] für das System zum Einreichen von Fehlermeldungen und
 weitere Kontaktinformationen.
 
+** Änderungshinweise
+
+  In diesem Fork wurden folgende Änderungen durchgeführt:
+  - Python3 ist erforderlich für die Ausführung
+  - input.csv kann in UTF-8 codiert sein
+  - Unterstüzung von Zeichen außerhalb ASCII
+  - Verbessertes Fehlerhandlung bei fehlerhaften Argumenten
+  - Leerzeichen in der IBAN werden automatisch 
+  
+
 
 * English
 ** Description
@@ -181,7 +192,7 @@ Now convert the input data to SEPA XML, referring to the created configuration
 file:
 
 #+BEGIN_EXAMPLE
-./CsvToSepaDD.py convert input.csv output.xml
+./CsvToSepaDD.py convert config.py input.csv output.xml
 #+END_EXAMPLE
 
 
@@ -196,3 +207,17 @@ file ~LICENSE.BSD~ for the full license text.
 ** Contact
 
 See the [[https://github.com/mfiedler/CsvToSepaDD][project page]] for an issue tracker and further contact information.
+
+** Modification done by Ventusfahrer
+
+2.6 Modifications
+
+  In this fork following changes have been performed:
+  - Python3 is needed for execution
+  - input.csv can be encoded in UTF-8
+  - support of characters outside ASCII
+  - improved error handling when wrong arguments are used
+  - blanks inside IBAN will be remove automatically
+  - IBAN will be automatically converted to uppercase
+  - IBAN is checked with checksum information
+
