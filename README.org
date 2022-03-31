@@ -217,7 +217,7 @@ See the [[https://github.com/mfiedler/CsvToSepaDD][project page]] for an issue t
   - input.csv can be encoded in UTF-8
   - support of characters outside ASCII
   - improved error handling when wrong arguments are used
-  - blanks inside IBAN will be remove automatically
+  - blanks inside IBAN will be removed automatically
   - IBAN will be automatically converted to uppercase
   - IBAN is checked with checksum information
 

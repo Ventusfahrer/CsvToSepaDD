@@ -283,10 +283,10 @@ _________________
 ~~~~~~~~~~~~~~~~~
 
   In this fork following changes have been performed:
-  - Python3 is neede for executions
+  - Python3 is needed for executions
   - input.csv can be encoded in UTF-8
   - support of characters outside ASCII
   - improved error handling when wrong arguments are used
-  - blanks inside IBAN will be remove automatically
+  - blanks inside IBAN will be removed automatically
   - IBAN will be automatically converted to uppercase
   - IBAN is checked with checksum information
