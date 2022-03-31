@@ -6,13 +6,15 @@ import datetime
 import pprint
 import string
 import sys
+import pathlib
 
-sys.path.append('./PySepaDD')
+# automate loading of used modules
+Script = pathlib.Path(sys.argv[0])
+sys.path.append(f'{Script.parent}/PySepaDD')
+sys.path.append(f'{Script.parent}/PyIbanCheck')
+
 import PySepaDD
-sys.path.append('./PyIbanCheck')
-
 from ibancheck import IBANcheck
-
 
 # if true, all debits will occur as a single item at the creditor's bank
 # account.  Otherwise, for each debtor there will be a single item.
