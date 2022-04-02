@@ -1,6 +1,6 @@
 [submodule "PySepaDD"]
 	path = PySepaDD
-	url = git@github.com:Ventusfahrer/PySepaDD
+	url = https://github.com/Ventusfahrer/PySepaDD
 [submodule "PyIbanCheck"]
 	path = PyIbanCheck
 	url = https://github.com/wunderlicht/PyIbanCheck
